@@ -58,7 +58,10 @@ class MainActivity : ComponentActivity() {
                 if (locationDao.getAllLocations().size > 0) {
                     val cityFromDB = locationDao.getAllLocations()[0].location
                     runOnUiThread {
-                        viewModel.getData(cityFromDB)
+                        if (viewModel.newData.value == true) {
+                            viewModel.getData(cityFromDB)
+                        }
+
                        // viewModel.getData(viewModel.cityName.value ?: cityFromDB)
                     }
                 }

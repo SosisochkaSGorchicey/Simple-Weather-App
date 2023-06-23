@@ -19,6 +19,7 @@ class MainViewModel(
     private val locationDao: LocationDao
 ) : ViewModel() {
 
+    val newData = MutableLiveData(true)
     val errorMessage = MutableLiveData<String>()
     val errorMessageForDisplay = MutableLiveData<String>()
     val mainData = MutableLiveData<MainData>()
@@ -33,11 +34,12 @@ class MainViewModel(
     }
 
     fun getData(name: String) {
+        newData.value = false
         //cityName.value = name
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
 
             val response = mainRepository.getMainCardData(name)
-            //Log.v("fgdsgfd", response.toString())
+            Log.v("fgdsgfd", response.toString())
             //Log.v("fgsrhtjm", locationDao.getAllLocations().toString())
 
             if (response.isSuccessful) {
