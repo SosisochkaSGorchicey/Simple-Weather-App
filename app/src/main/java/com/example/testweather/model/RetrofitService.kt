@@ -12,7 +12,7 @@ const val MY_KEY = "3571a5fb99a34fcd980132340232602"
 interface RetrofitService {
 
 
-    @GET("https://api.weatherapi.com/v1/forecast.json")
+    @GET("forecast.json")
     suspend fun getMainCardData(
         @Query("key") key: String = MY_KEY,
         @Query("q") q: String,
@@ -30,7 +30,7 @@ interface RetrofitService {
         fun getInstance() : RetrofitService {
             if (retrofitService == null) {
                 val retrofit = Retrofit.Builder()
-                    .baseUrl("https://howtodoandroid.com/")
+                    .baseUrl("https://api.weatherapi.com/v1/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                 retrofitService = retrofit.create(RetrofitService::class.java)
