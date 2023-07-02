@@ -25,8 +25,6 @@ interface RetrofitService {
 
         var retrofitService: RetrofitService? = null
 
-        
-
         fun getInstance() : RetrofitService {
             if (retrofitService == null) {
                 val retrofit = Retrofit.Builder()
@@ -34,8 +32,10 @@ interface RetrofitService {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                 retrofitService = retrofit.create(RetrofitService::class.java)
+                return retrofitService as RetrofitService
+            } else {
+                return retrofitService as RetrofitService
             }
-            return retrofitService!!
         }
 
     }

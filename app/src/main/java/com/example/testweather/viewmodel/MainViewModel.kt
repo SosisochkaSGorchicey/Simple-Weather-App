@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val mainRepository: MainRepository,
@@ -30,7 +31,7 @@ class MainViewModel(
 
     val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         errorMessageForDisplay.postValue(throwable.localizedMessage)
-        //Log.v("AlicesEXXXX", "Exception handled: ${throwable.localizedMessage}")
+        //Log.v("ErrorFromCoroutine", "Exception handled: ${throwable.localizedMessage}")
     }
 
     fun getData(name: String) {
@@ -39,14 +40,16 @@ class MainViewModel(
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
 
             val response = mainRepository.getMainCardData(name)
-            Log.v("fgdsgfd", response.toString())
-            //Log.v("fgsrhtjm", locationDao.getAllLocations().toString())
+            Log.v("ResponseFromApi", response.toString())
+            //Log.v("LocationsFromDB", locationDao.getAllLocations().toString())
 
             if (response.isSuccessful) {
-                cityName.postValue(name)
-                errorMessageForDisplay.postValue("")
-                mainData.postValue(response.body())
-                loading.postValue(false)
+                withContext(Dispatchers.Main) {
+                    cityName.value = name
+                    errorMessageForDisplay.value = ""
+                    mainData.value = response.body()
+                    loading.value = false
+                }
             } else {
                 if (cityName.value == "NoRealCity") {
                     cityName.postValue(name)
